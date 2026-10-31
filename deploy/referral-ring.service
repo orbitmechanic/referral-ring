@@ -1,0 +1,32 @@
+[Unit]
+Description=Referral Ring (referral code exchange)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ring
+Group=ring
+WorkingDirectory=/opt/referral-ring
+ExecStart=/opt/referral-ring/referral-ring serve
+Environment=DB_PATH=/var/lib/referral-ring/ring.db
+Environment=PORT=8080
+Environment=STATIC_DIR=/opt/referral-ring/web
+Environment=SITE_URL=https://ring.example.com
+Environment=RUST_LOG=referral_ring=info
+Restart=always
+RestartSec=3
+
+# Hardening: the process only needs its own data directory.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/referral-ring
+CapabilityBoundingSet=
+AmbientCapabilities=
+LockPersonality=true
+MemoryDenyWriteExecute=true
+
+[Install]
+WantedBy=multi-user.target

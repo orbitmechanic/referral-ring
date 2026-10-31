@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Referral Ring — one code in, one code out</title>
+<meta name="description" content="A mutual-aid referral ring for Cape: pull a stranger's code, save $20/mo, then pass your own code back. Nobody pays for the introduction.">
+<meta name="theme-color" content="#0a0a0c">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%23f5b841' stroke-width='3' stroke-dasharray='6 4'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="top">
+  <a class="mark" href="#/">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="12.5" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="7 4.5"><animateTransform attributeName="transform" type="rotate" from="0 16 16" to="360 16 16" dur="14s" repeatCount="indefinite"/></circle></svg>
+    <span>Referral<em>Ring</em></span>
+  </a>
+  <nav class="topnav">
+    <a href="#how">How it works</a>
+    <a href="#pool">The pool</a>
+    <button class="ghost" id="navManage">My lines</button>
+  </nav>
+</header>
+
+<main id="view-home">
+  <section class="hero">
+    <p class="kicker">A mutual-aid referral ring · Cape Mobile</p>
+    <h1>Somebody's code.<br><i>Your</i> twenty dollars.<br>Every month.</h1>
+    <p class="lede">
+      Cape gives $20 off to <b>both</b> people on a referral — every month, for as long as
+      you're both subscribers. Four referrals and the bill is zero.
+      The only hard part was knowing somebody. So we fixed that part.
+    </p>
+    <div class="hero-actions">
+      <a class="btn primary" href="#pull">Pull a code</a>
+      <a class="btn quiet" href="#how">Read the rules first</a>
+    </div>
+    <p class="fineprint">
+      Not affiliated with Cape. Codes are shared here voluntarily by the people who own them.
+    </p>
+  </section>
+
+  <!-- ===================== MACHINE ===================== -->
+  <section class="machine-wrap" id="pull">
+    <div class="machine" id="machine">
+      <div class="machine-head">
+        <span class="plate">REFERRAL&nbsp;DISPENSER</span>
+        <span class="lamp" id="lamp" title="pool status"><i></i><b id="poolLight">checking…</b></span>
+      </div>
+
+      <div class="window" id="reelWindow" aria-live="polite" aria-label="Referral code">
+        <div class="reel" id="reel"></div>
+        <div class="glare" aria-hidden="true"></div>
+      </div>
+
+      <div class="machine-foot">
+        <div class="pips" id="pips" aria-label="referrals this line still needs"></div>
+        <p class="machine-hint" id="machineHint">Four slots left means a free line. Pull to see whose code you're about to use.</p>
+        <button class="lever" id="lever" aria-label="Pull a code">
+          <span class="lever-arm"><i></i></span>
+          <span class="lever-label">PULL</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- result / claim flow -->
+    <div class="tray" id="tray" hidden>
+      <div class="tray-head">
+        <h2 id="trayTitle">This one's yours</h2>
+        <button class="x" id="trayClose" aria-label="Close">×</button>
+      </div>
+      <div class="tray-body" id="trayBody"></div>
+    </div>
+  </section>
+
+  <!-- ===================== HOW ===================== -->
+  <section class="how" id="how">
+    <h2 class="section-title">The ring turns in four moves</h2>
+    <ol class="steps">
+      <li>
+        <span class="step-n">01</span>
+        <h3>Pull a code</h3>
+        <p>Write it down. It's held for you for 72 hours so nobody else gets handed the same one.</p>
+      </li>
+      <li>
+        <span class="step-n">02</span>
+        <h3>Sign up at Cape with it</h3>
+        <p>Both of you get $20 off, per month, while you both stay subscribed. That's Cape's rule, not ours.</p>
+      </li>
+      <li>
+        <span class="step-n">03</span>
+        <h3>Come back and register the claim</h3>
+        <p>The code's owner checks their own bill. When they see the credit land, they vouch for you — that's the lock.</p>
+      </li>
+      <li>
+        <span class="step-n">04</span>
+        <h3>Hand your own code back</h3>
+        <p>Once you're confirmed, you add your code and how many referrals you still need. The ring turns again.</p>
+      </li>
+    </ol>
+    <p class="how-note">
+      A code is never given to two people at once, and nobody can add a code until the person
+      they used has confirmed the credit on their account. That's the whole trust model — no accounts,
+      no passwords, just one private link per person.
+    </p>
+  </section>
+
+  <!-- ===================== POOL ===================== -->
+  <section class="pool" id="pool">
+    <div class="pool-head">
+      <h2 class="section-title">Who's waiting right now</h2>
+      <p class="pool-note">We deal the neediest first: a code needing four referrals is four times likelier to come out of the machine than one needing a single referral.</p>
+    </div>
+    <div class="bars" id="bars"></div>
+    <div class="pool-legend" id="poolLegend"></div>
+  </section>
+
+  <!-- ===================== OWNERS ===================== -->
+  <section class="owners">
+    <div class="owner-card">
+      <h2>Already have a management link?</h2>
+      <p>Your link is your identity here. Paste it to see claims, confirm credits, and add your other lines.</p>
+      <form id="manageOpen" class="inline-form">
+        <input id="manageToken" type="text" placeholder="paste your link or key" autocomplete="off" spellcheck="false">
+        <button class="btn primary" type="submit">Open</button>
+      </form>
+    </div>
+    <div class="owner-card quiet-card">
+      <h2>Why we can't email you a magic link</h2>
+      <p>Cape hands out $20 a month forever. An email server that can be phished is a liability, so there isn't one.
+         Your key lives in a URL, and the only way in is to have it. Bookmark it. Nobody here can reset it for you.</p>
+    </div>
+  </section>
+</main>
+
+<!-- ===================== MANAGE VIEW ===================== -->
+<main id="view-manage" hidden>
+  <section class="sheet">
+    <a class="back" href="#/">← back</a>
+    <div id="manageBody"><p class="muted">loading…</p></div>
+  </section>
+</main>
+
+<!-- ===================== CLAIM VIEW ===================== -->
+<main id="view-claim" hidden>
+  <section class="sheet narrow">
+    <a class="back" href="#/">← back</a>
+    <div id="claimBody"><p class="muted">loading…</p></div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div>
+    <strong>Referral Ring</strong>
+    <p>An unaffiliated exchange for Cape referral codes. Every line listed here belongs to a real subscriber who pasted it in.</p>
+  </div>
+  <div class="foot-links">
+    <a href="#how">How it works</a>
+    <a href="https://www.cape.co/referrals" target="_blank" rel="noopener">Cape's own referral terms ↗</a>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

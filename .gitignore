@@ -1,0 +1,6 @@
+/target
+*.db
+*.db-shm
+*.db-wal
+/ring.db
+.DS_Store

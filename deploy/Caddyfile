@@ -1,0 +1,10 @@
+# Automatic HTTPS in front of the Rust server, two lines.
+# Install caddy, drop this in /etc/caddy/Caddyfile, `systemctl reload caddy`.
+#
+# Caddy gets a free certificate for ring.example.com and proxies to the binary.
+# Point an A/AAAA record at the box first.
+
+ring.example.com {
+	encode zstd gzip
+	reverse_proxy 127.0.0.1:8080
+}
